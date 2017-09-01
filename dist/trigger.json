@@ -1,0 +1,24 @@
+{
+   "trigger":{
+      "id":"prom-trigger",
+      "name":"Prometheus Trigger",
+      "description":"Alert on Jaeger data",
+      "severity":"HIGH",
+      "enabled":true,
+      "autoDisable":true,
+      "tags":{
+         "prometheus":"Test"
+      },
+      "context":{
+         "prometheus.url":"http://prometheus:9090"
+      }
+   },
+   "conditions":[
+      {
+         "type":"EXTERNAL",
+         "alerterId":"prometheus",
+         "dataId":"prometheus-test",
+         "expression":"(sum(increase(span_count{error=\"true\",span_kind=\"server\"}[1m])) without (pod,instance,job,namespace,endpoint,transaction,error,operation,span_kind) / sum(increase(span_count{span_kind=\"server\"}[1m])) without (pod,instance,job,namespace,endpoint,transaction,error,operation,span_kind)) > 0.3"
+      }
+   ]
+}
